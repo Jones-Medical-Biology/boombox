@@ -8,11 +8,8 @@ type Dataset = [DataPoint]
 euclideanDistance :: DataPoint -> DataPoint -> Double
 euclideanDistance x y = sqrt . sum $ zipWith (\a b -> (a-b) ^ 2 ) x y
 
-'euclideanDistance3D :: DataPoint -> DataPoint -> DataPoint-> Double
+euclideanDistance3D :: DataPoint -> DataPoint -> DataPoint-> Double
 euclideanDistance3D x y z = sqrt . sum $ zipWith3 (\a b c -> (a-b) ^ 2 + (a-c)^2) x y z
-
--- coordinateDiff = zipWith (-) a b
--- diffSquared = map (\x -> x^2)
 
 findKNearestNeighbors :: Int -> Dataset -> DataPoint -> [(DataPoint, Double)]
 findKNearestNeighbors k dataset point = take k sortedDistances
