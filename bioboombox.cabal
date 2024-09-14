@@ -35,7 +35,7 @@ license:            MIT
 license-file:       LICENSE
 
 -- The package author(s).
-author:             Calypsa and Salma
+author:             Jones Medical Biology
 
 -- An email address to which users can send suggestions, bug reports, and patches.
 maintainer:         noahtjones@ufl.edu
@@ -75,3 +75,12 @@ executable bioboombox
 
     -- Base language which the package is written in.
     default-language: GHC2021
+
+library
+        import: warnings
+        exposed-modules: Lib
+                       , Umap
+        -- other-modules:
+        build-depends: base ^>=4.18.2.1
+        hs-source-dirs: src
+        default-language: GHC2021
