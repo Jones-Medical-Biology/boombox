@@ -26,7 +26,9 @@ main = print $ kNearestNeighbors
 
 -- practice data
 dataset :: Dataset
-dataset = [[1.0, 2.0, 3.0], [2.0, 3.0, 4.0], [3.0, 4.0, 5.0], [4.0, 5.0, 6.0], [5.0, 6.0, 7.0], [6.0, 7.0, 8.0], [7.0, 8.0, 9.0]]
+-- dataset = [[1.0, 2.0, 3.0], [2.0, 3.0, 4.0], [3.0, 4.0, 5.0], [4.0, 5.0, 6.0], [5.0, 6.0, 7.0], [6.0, 7.0, 8.0], [7.0, 8.0, 9.0]]
 
 targetPoint :: DataPoint
 targetPoint = [2.5, 3.5]
+
+dataset = readFile "dataset.txt"
