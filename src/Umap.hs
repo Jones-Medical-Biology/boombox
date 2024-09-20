@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-
 module HLS where
 import Data.List (sortOn)
 
