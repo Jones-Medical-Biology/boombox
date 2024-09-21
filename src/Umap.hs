@@ -1,4 +1,4 @@
-module HLS where
+module Umap where
 import Data.List (sortOn)
 
 type DataPoint = [Double]
@@ -16,7 +16,7 @@ euclideanDistanceGeneralized x y =
   sqrt $ sum $ zipWith (\ x y -> (y - x) ^ 2) x y
 
 findKNearestNeighbors :: Int -> Dataset -> DataPoint -> [(DataPoint, Double)]
-findKNearestNeighbors k dataset point = take k sortedDistances
+findKNearestNeighbors k ds point = take k sortedDistances
   where
     distances = map(\x -> (x, euclideanDistanceGeneralized point x)) dataset
     sortedDistances = sortOn snd distances
