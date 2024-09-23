@@ -7,8 +7,8 @@ if ($1 == "") then
    exit 1
 fi
 
-ROWS=1000000
-COLS=5
+ROWS=$1
+COLS=$2
 
 # Set the output file name
 OUTPUT_FILE="large_random.csv"
