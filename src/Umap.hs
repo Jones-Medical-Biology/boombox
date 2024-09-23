@@ -18,7 +18,7 @@ euclideanDistanceGeneralized x y =
 findKNearestNeighbors :: Int -> Dataset -> DataPoint -> [(DataPoint, Double)]
 findKNearestNeighbors k ds point = take k sortedDistances
   where
-    distances = map(\x -> (x, euclideanDistanceGeneralized point x)) dataset
+    distances = map(\x -> (x, euclideanDistanceGeneralized point x)) ds
     sortedDistances = sortOn snd distances
 
 kNearestNeighbors :: [(DataPoint, Double)]

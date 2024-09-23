@@ -37,3 +37,14 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
 
     return first_point, nearest_neighbors, distances
 
+if __name__ == "__main__":
+    # Check if file path is provided as command-line argument
+    if len(sys.argv) != 2:
+        print("Usage: python script_name.py <path_to_csv_file>")
+        sys.exit(1)
+
+    # Get file path from command-line argument
+    file_path = sys.argv[1]
+
+    # Run the function
+    find_nearest_neighbors(file_path)
