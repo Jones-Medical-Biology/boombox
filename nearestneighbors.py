@@ -14,6 +14,8 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
 
     # Convert data to numpy array
     data = np.array(data)
+    # Get the first point
+    first_point = data[0]
 
     # Get the first point
     first_point = data[0]
