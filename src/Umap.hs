@@ -1,8 +1,13 @@
-module Umap where
+module Umap ( dataset
+            , kNearestNeighbors
+            , DataPoint
+            , DataSet
+            ) where
+
 import Data.List (sortOn)
 
 type DataPoint = [Double]
-type Dataset = [DataPoint]
+type DataSet = [DataPoint]
 
 -- distance
 euclideanDistance :: DataPoint -> DataPoint -> Double
@@ -15,27 +20,23 @@ euclideanDistanceGeneralized :: DataPoint -> DataPoint -> Double
 euclideanDistanceGeneralized x y =
   sqrt $ sum $ zipWith (\ x y -> (y - x) ^ 2) x y
 
-findKNearestNeighbors :: Int -> Dataset -> DataPoint -> [(DataPoint, Double)]
+findKNearestNeighbors :: Int -> DataSet -> DataPoint -> [(DataPoint, Double)]
 findKNearestNeighbors k ds point = take k sortedDistances
   where
-    distances = map(\x -> (x, euclideanDistanceGeneralized point x)) dataset
+    distances = map(\x -> (x, euclideanDistanceGeneralized point x)) ds
     sortedDistances = sortOn snd distances
 
-kNearestNeighbors :: [(DataPoint, Double)]
-kNearestNeighbors = findKNearestNeighbors 2 dataset targetPoint
-
--- to print output
-main :: IO ()
-main = print $ kNearestNeighbors
+kNearestNeighbors :: DataSet -> DataPoint -> [(DataPoint, Double)]
+kNearestNeighbors ds tp = findKNearestNeighbors 2 ds tp
 
 -- practice data
-dataset :: Dataset
+dataset :: DataSet
 dataset = [[1.0, 2.0, 3.0], [2.0, 3.0, 4.0], [3.0, 4.0, 5.0], [4.0, 5.0, 6.0], [5.0, 6.0, 7.0], [6.0, 7.0, 8.0], [7.0, 8.0, 9.0]]
 
-dataset2 :: Dataset
+dataset2 :: DataSet
 dataset2 = [[1..5], [6..10], [11..15],[16..20]]
 
 targetPoint :: DataPoint
-targetPoint = [2.5, 3.5]
+targetPoint = [2.5, 3.5, 4.5]
 
 -- dataset = readFile "dataset.txt"
