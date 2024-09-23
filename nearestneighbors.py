@@ -8,7 +8,7 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
     data = []
     with open(file_path, 'r') as file:
         csv_reader = csv.reader(file)
-        next(csv_reader)  # Skip header row if present
+        # next(csv_reader)  # Skip header row if present
         for row in csv_reader:
             data.append([float(x) for x in row])
 
@@ -29,7 +29,7 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
     distances = [distances[0][1], distances[0][2]]
 
     # Print results
-    print(f"First point: {first_point.tolist()}")
+    print(f"Ref: {first_point.tolist()}")
     # print(f"Nearest neighbors:")
     print(f"1: {nearest_neighbors[0].tolist()}, Distance: {distances[0]}")
     print(f"2: {nearest_neighbors[1].tolist()}, Distance: {distances[1]}")

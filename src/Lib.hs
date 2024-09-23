@@ -17,4 +17,15 @@ giveMeData x = do
   let myDecode = decode NoHeader csvData :: Either String (V.Vector Umap.DataPoint)
   case myDecode of
     Left err -> putStrLn err
-    Right vs -> (putStrLn . show) $ kNearestNeighbors (tail (V.toList vs)) (head (V.toList vs))
+    Right vs -> do
+      out <- return (kNearestNeighbors (tail (V.toList vs)) (head (V.toList vs)))
+      putStr "Ref: "
+      (putStrLn . show) (head (V.toList vs))
+      putStr "1: "
+      (putStr . show) $ fst $ (!!) out 0
+      putStr ", Distance: "
+      (putStrLn . show) $ snd $ (!!) out 0
+      putStr "2: "
+      (putStr . show) $ fst $ (!!) out 1
+      putStr ", Distance: "
+      (putStrLn . show) $ snd $ (!!) out 1

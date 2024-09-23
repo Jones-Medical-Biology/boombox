@@ -1,6 +1,12 @@
 #!/bin/bash
 
 # Set the number of rows and columns
+
+if ($1 == "") then
+   echo "gentestdata.sh ROWS COLS"
+   exit 1
+fi
+
 ROWS=1000000
 COLS=5
 
