@@ -69,6 +69,7 @@ executable bioboombox
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.2.1
+                    , bioboombox
 
     -- Directories containing source files.
     hs-source-dirs:   app
@@ -81,7 +82,11 @@ library
         exposed-modules: Lib
                        , Umap
         -- other-modules:
-        build-depends: base ^>=4.18.2.1
+        build-depends: base       ^>=4.18.2.1
+                     , bytestring ^>=0.11.5.3
+                     , vector     ^>=0.13.1.0
+                     , cassava    ^>=0.5.3.2
+                     , attoparsec ^>=0.14.4
         hs-source-dirs: src
         default-language: GHC2021
 
