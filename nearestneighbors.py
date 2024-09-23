@@ -1,13 +1,9 @@
 import csv
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-# import time
 import sys
 
 def find_nearest_neighbors(file_path, n_neighbors=2):
-    # Start timer
-    # start_time = time.time()
-
     # Read CSV file
     data = []
     with open(file_path, 'r') as file:
@@ -18,33 +14,27 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
 
     # Convert data to numpy array
     data = np.array(data)
+    # Get the first point
+    first_point = data[0]
 
     # Create and fit NearestNeighbors model
     nn = NearestNeighbors(n_neighbors=n_neighbors+1, algorithm='auto', metric='euclidean')
     nn.fit(data)
 
-    # Find nearest neighbors for each point
-    distances, indices = nn.kneighbors(data)
+    # Find nearest neighbors for the first point
+    distances, indices = nn.kneighbors([first_point])
 
-    # Find the pair with the smallest distance
-    min_distance = float('inf')
-    nearest_pair = None
-
-    for i in range(len(data)):
-        for j in range(1, n_neighbors+1):
-            if distances[i][j] < min_distance:
-                min_distance = distances[i][j]
-                nearest_pair = (i, indices[i][j])
-
-    # End timer
-    # end_time = time.time()
+    # The first neighbor will be the point itself, so we take the next two
+    nearest_neighbors = [data[indices[0][1]], data[indices[0][2]]]
+    distances = [distances[0][1], distances[0][2]]
 
     # Print results
-    print(f"Nearest neighbors: Point {nearest_pair[0]} and Point {nearest_pair[1]}")
-    print(f"Distance: {min_distance}")
-    # print(f"Time taken: {end_time - start_time:.2f} seconds")
+    # print(f"First point: {first_point.tolist()}")
+    # print(f"Nearest neighbors:")
+    print(f"1: {nearest_neighbors[0].tolist()}, Distance: {distances[0]}")
+    print(f"2: {nearest_neighbors[1].tolist()}, Distance: {distances[1]}")
 
-    return nearest_pair, min_distance
+    return first_point, nearest_neighbors, distances
 
 if __name__ == "__main__":
     # Check if file path is provided as command-line argument
