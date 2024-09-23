@@ -29,7 +29,7 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
     distances = [distances[0][1], distances[0][2]]
 
     # Print results
-    # print(f"First point: {first_point.tolist()}")
+    print(f"First point: {first_point.tolist()}")
     # print(f"Nearest neighbors:")
     print(f"1: {nearest_neighbors[0].tolist()}, Distance: {distances[0]}")
     print(f"2: {nearest_neighbors[1].tolist()}, Distance: {distances[1]}")
