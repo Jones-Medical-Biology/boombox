@@ -1,9 +1,6 @@
-#!/bin/bash
-
 # Set the number of rows and columns
-
-if ($1 == "") then
-   echo "gentestdata.sh ROWS COLS"
+if [ $# -lt 3 ]; then
+   echo "gentestdata.sh ROWS COLS FILENAME"
    exit 1
 fi
 
@@ -11,7 +8,7 @@ ROWS=$1
 COLS=$2
 
 # Set the output file name
-OUTPUT_FILE="large_random.csv"
+OUTPUT_FILE=$3
 
 # Generate the CSV header
 # header=""
