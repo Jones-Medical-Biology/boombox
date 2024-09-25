@@ -1,5 +1,5 @@
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 --haskell|--python -r ROWS -c COLUMNS"
+    echo "Usage: $0 --haskell|--python -r ROWS -c COLUMNS -n NTESTS"
     exit 1
 fi
 
