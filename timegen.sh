@@ -83,7 +83,7 @@ case $lang in
 	    env time -f "%e,%U,%S" python \
 		nearestneighbors.py $TEST_FILE \
 		     2>&1 >/dev/null \
-	     	| tr -d '\n' '' \
+	     	| tr -d '\n' \
 		     >> $CSV_FILE
 	    echo ,$rows,$cols,$lang >> $CSV_FILE
 	done
