@@ -27,7 +27,13 @@ findKNearestNeighbors k ds point = take k sortedDistances
     sortedDistances = sortOn snd distances
 
 kNearestNeighbors :: DataSet -> DataPoint -> [(DataPoint, Double)]
-kNearestNeighbors ds tp = findKNearestNeighbors 2 ds tp
+kNearestNeighbors ds tp = findKNearestNeighbors k ds tp
+
+graphWeights :: DataSet -> [[(Int, Double)]] -> [[(Int, Double)]]
+graphWeights ds knn = map assignWeights knn
+  where
+    -- Weight assignment using Gaussian kernel
+    assignWeights neighbors = map(\(i,d) -> (i, exp(-0.5*d^2))) neighbors
 
 -- practice data
 dataset :: DataSet
