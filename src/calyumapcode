@@ -8,7 +8,8 @@ highDimRelSimScore = e^(-(euclideanDistanceGeneralized - distNearestNeighbor)/si
 -- is this not 2ndNearestNeighbor??? or first??
 k = 2^entropy
     let entropy = sum highDimRelSimScore
-        -- | highDimRelSimScore > 0
+        -- | highDimRelSimScore > 1^(-30) 
+        -- doesn't have to be 1^(-30), we just want to eliminate the numbers that are so close to zero it's negligible
         -- use if then else? bc i only want non-zero highDimRelSimScores
         -- how do i make these apply to each value in a list and give a list of similarity scores?
 
