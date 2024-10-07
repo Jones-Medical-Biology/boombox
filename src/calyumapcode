@@ -1,0 +1,36 @@
+main :: IO ()
+main = do
+    let sigma = 1
+    let euclideanDistanceGeneralized = [3.0, 4.0, 5.5]
+    let distNearestNeighbor = 1.0 
+highDimRelSimScore = e^(-(euclideanDistanceGeneralized - distNearestNeighbor)/sigma)
+-- highDimRelSimScore 2ndNearestNeighbor = 1, highDimRelSimScore = e^(-0/sigma)
+-- is this not 2ndNearestNeighbor??? or first??
+k = 2^entropy
+    let entropy = sum highDimRelSimScore
+        -- | highDimRelSimScore > 0
+        -- use if then else? bc i only want non-zero highDimRelSimScores
+        -- how do i make these apply to each value in a list and give a list of similarity scores?
+
+-- set k and get an entropy value
+-- adjust sigma to give desired entropy 
+-- just go with Gaussian 
+
+
+-- ...couple more steps 
+
+-- let's making the high-dimensional similiarity scores symmetrical
+-- need a symmetrical score for all points
+
+simScoreSym = (simScoreXY + simScoreYX) - (simScoreXY * simScoreYX)
+-- simScoreXY and simScoreYX should be two scores (relative to eachother) given by highDimRelSimScore
+-- should be within the list of highDimRelSimScore
+
+-- calculating low-dimensional similarity scores (using a fixed, symmetrical curve based on t-distribution)
+-- these low-dimensional scores will be used to make low-dimensional graph
+-- lowDimRelSimScore = 1 / (1 + (alpha * lowDimDist)^(2 * beta))
+-- will need lowDimRelScore for each point
+-- where lowDimDist is the low-dimensional distance between two points (how do we get this?)
+-- by default, let alpha = 1.577 
+-- by default, let beta = 0.8951
+-- however, alpha and beta can be adjusted to produce minimum distance between low-dim. points and their spread
