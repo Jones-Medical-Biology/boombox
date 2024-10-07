@@ -3,15 +3,20 @@ main = do
     let sigma = 1
     let euclideanDistanceGeneralized = [3.0, 4.0, 5.5]
     let distNearestNeighbor = 1.0 
-highDimRelSimScore = e^(-(euclideanDistanceGeneralized - distNearestNeighbor)/sigma)
+input :: [[(DataPoint, Double)]]
+highDimRelSimScore (x:xs) = e^(-(euclideanDistanceGeneralized - rho)/sigma)
+    where euclideanDistanceGeneralized = case x of
+        
+-- distNearestNeighbor = rho
 -- highDimRelSimScore 2ndNearestNeighbor = 1, highDimRelSimScore = e^(-0/sigma)
 -- is this not 2ndNearestNeighbor??? or first??
+-- take in a list of lists 
 k = 2^entropy
     let entropy = sum highDimRelSimScore
         -- | highDimRelSimScore > 1^(-30) 
         -- doesn't have to be 1^(-30), we just want to eliminate the numbers that are so close to zero it's negligible
-        -- use if then else? bc i only want non-zero highDimRelSimScores
-        -- how do i make these apply to each value in a list and give a list of similarity scores?
+        -- use if then else? bc I only want non-zero highDimRelSimScores
+        -- how do I make these apply to each value in a list and give a list of similarity scores?
 
 -- set k and get an entropy value
 -- adjust sigma to give desired entropy 
@@ -20,11 +25,11 @@ k = 2^entropy
 
 -- ...couple more steps 
 
--- let's making the high-dimensional similiarity scores symmetrical
+-- let's make the high-dimensional similarity scores symmetrical
 -- need a symmetrical score for all points
 
 simScoreSym = (simScoreXY + simScoreYX) - (simScoreXY * simScoreYX)
--- simScoreXY and simScoreYX should be two scores (relative to eachother) given by highDimRelSimScore
+-- simScoreXY and simScoreYX should be two scores (relative to each other) given by highDimRelSimScore
 -- should be within the list of highDimRelSimScore
 
 -- calculating low-dimensional similarity scores (using a fixed, symmetrical curve based on t-distribution)
@@ -34,4 +39,4 @@ simScoreSym = (simScoreXY + simScoreYX) - (simScoreXY * simScoreYX)
 -- where lowDimDist is the low-dimensional distance between two points (how do we get this?)
 -- by default, let alpha = 1.577 
 -- by default, let beta = 0.8951
--- however, alpha and beta can be adjusted to produce minimum distance between low-dim. points and their spread
+-- however, alpha and beta can be adjusted to produce the minimum distance between low-dim. points and their spread
