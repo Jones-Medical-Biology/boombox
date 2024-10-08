@@ -27,13 +27,22 @@ findKNearestNeighbors k ds point = take k sortedDistances
     sortedDistances = sortOn snd distances
 
 kNearestNeighbors :: DataSet -> DataPoint -> [(DataPoint, Double)]
-kNearestNeighbors ds tp = findKNearestNeighbors k ds tp
+kNearestNeighbors ds tp = findKNearestNeighbors 2 ds tp
 
 graphWeights :: DataSet -> [[(Int, Double)]] -> [[(Int, Double)]]
 graphWeights ds knn = map assignWeights knn
   where
     -- Weight assignment using Gaussian kernel
     assignWeights neighbors = map(\(i,d) -> (i, exp(-0.5*d^2))) neighbors
+    
+distanceMatrix :: DataSet -> [[ (DataPoint, Double) ]]
+distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized point d)) ds) ds
+
+-- Finding knn based on the distance matrix
+findKNearestNeighbors :: Int -> [[(DataPoint, Double)]] -> Int -> [(DataPoint, Double)]
+findKNearestNeighbors k distMatrix idx = take k sortedDistances
+  where
+    sortedDistances = sortOn snd (distMatrix !! idx) -- Sort distances for the given index
 
 -- practice data
 dataset :: DataSet
@@ -44,5 +53,10 @@ dataset2 = [[1..5], [6..10], [11..15],[16..20]]
 
 targetPoint :: DataPoint
 targetPoint = [2.5, 3.5, 4.5]
+
+main :: IO ()
+main = do
+   let distMatrix = distanceMatrix dataset
+   mapM_ print distMatrix --mapM is a monadic version of map the underscore ignores the results and simply performs the action to each element of the list but doesnt collect the results.
 
 -- dataset = readFile "dataset.txt"
