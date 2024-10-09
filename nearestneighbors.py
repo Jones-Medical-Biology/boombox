@@ -18,7 +18,7 @@ def find_nearest_neighbors(file_path, n_neighbors=2):
     first_point = data[0]
 
     # Create and fit NearestNeighbors model
-    nn = NearestNeighbors(n_neighbors=n_neighbors+1, algorithm='auto', metric='euclidean')
+    nn = NearestNeighbors(n_neighbors=n_neighbors+1, algorithm='brute', metric='euclidean') # changed from auto
     nn.fit(data)
 
     # Find nearest neighbors for the first point
