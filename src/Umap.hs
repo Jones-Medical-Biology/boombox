@@ -38,6 +38,23 @@ graphWeights ds knn = map assignWeights knn
 distanceMatrix :: DataSet -> [[ (DataPoint, Double) ]]
 distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized point d)) ds) ds
 
+generateSigma :: [[ (DataPoint, Double) ]] -> Int -> [[ (DataPoint, Double, Double) ]] 
+generateSigma x:xs k = 
+  sigmaHelper x k 
+  where
+    sigmaHelper [] k = generateSigma xs k 
+    sigmaHelper (x:xs) k = x : sigmaHelper xs 
+
+rho = sortOn snd x !! 1 
+
+(sum $ ((\x -> x - rho) x)) / ln(log_2(k))
+
+
+
+
+sigma = (sum distances)/ln(log_2(k)) 
+
+
 -- Finding knn based on the distance matrix
 findKNearestNeighbors :: Int -> [[(DataPoint, Double)]] -> Int -> [(DataPoint, Double)]
 findKNearestNeighbors k distMatrix idx = take k sortedDistances
