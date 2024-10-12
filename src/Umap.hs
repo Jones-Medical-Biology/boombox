@@ -5,6 +5,8 @@ module Umap ( dataset
             ) where
 
 import Data.List (sortOn)
+import Control.Parallel.Strategies
+import Control.DeepSeq (NFData)
 
 type DataPoint = [Double]
 type DataSet = [DataPoint]
@@ -17,14 +19,26 @@ euclideanDistance3D :: DataPoint -> DataPoint -> DataPoint-> Double
 euclideanDistance3D x y z = sqrt . sum $ zipWith3 (\a b c -> (a-b) ^ 2 + (a-c)^2) x y z
 
 euclideanDistanceGeneralized :: DataPoint -> DataPoint -> Double
-euclideanDistanceGeneralized x y =
-  sqrt $ sum $ zipWith (\ x y -> (y - x) ^ 2) x y
+euclideanDistanceGeneralized x y = sqrt $ sum $ squaredDifferences
+  where
+    squaredDifferences = zipWith (\ x y -> (y - x) ^ 2) x y `using` parList rdeepseq
 
-findKNearestNeighbors :: Int -> DataSet -> DataPoint -> [(DataPoint, Double)]
+-- findKNearestNeighbors :: Int -> DataSet -> DataPoint -> [(DataPoint, Double)]
+-- findKNearestNeighbors k ds point = take k sortedDistances
+--   where
+--     distances = map(\x -> (x, euclideanDistanceGeneralized point x)) ds
+--     sortedDistances = sortOn snd distances
+
+findKNearestNeighbors :: (NFData DataPoint, NFData DataSet) => Int -> DataSet -> DataPoint -> [(DataPoint, Double)]
 findKNearestNeighbors k ds point = take k sortedDistances
   where
-    distances = map(\x -> (x, euclideanDistanceGeneralized point x)) ds
+    distances = parMap rdeepseq (\x -> (x, euclideanDistanceGeneralized point x)) ds
     sortedDistances = sortOn snd distances
+
+findKNearestNeighborsMatrix :: Int -> [[(DataPoint, Double)]] -> Int -> [(DataPoint, Double)]
+findKNearestNeighborsMatrix k distMatrix idx = take k sortedDistances
+  where
+    sortedDistances = sortOn snd (distMatrix !! idx)
 
 kNearestNeighbors :: DataSet -> DataPoint -> [(DataPoint, Double)]
 kNearestNeighbors ds tp = findKNearestNeighbors 2 ds tp
@@ -56,10 +70,6 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 
 
 -- Finding knn based on the distance matrix
-findKNearestNeighbors :: Int -> [[(DataPoint, Double)]] -> Int -> [(DataPoint, Double)]
-findKNearestNeighbors k distMatrix idx = take k sortedDistances
-  where
-    sortedDistances = sortOn snd (distMatrix !! idx) -- Sort distances for the given index
 
 -- practice data
 dataset :: DataSet
