@@ -47,8 +47,8 @@ graphWeights :: DataSet -> [[(Int, Double)]] -> [[(Int, Double)]]
 graphWeights ds knn = map assignWeights knn
   where
     -- Weight assignment using Gaussian kernel
-    assignWeights neighbors = map(\(i,d) -> (i, exp(-0.5*d^2))) neighbors
-    
+    assignWeights neighbors = map (\(i,d) -> (i, exp (-0.5*d^2))) neighbors
+
 distanceMatrix :: DataSet -> [[ (DataPoint, Double) ]]
 distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized point d)) ds) ds
 
@@ -64,10 +64,17 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
 sigma :: (Enum a, Floating a) => a
 sigma = (sum $ (map (\x -> x - rho) x)) / (log (logBase 2 (k)))
-  where 
-    x = [1..10]
+  where
+    x = [distances]
     k = 4
     rho = 1
+
+distances :: [DataPoint] -> DataPoint -> [(DataPoint, Double)]
+distances = map (\x -> (x, euclideanDistanceGeneralized point x))
+
+simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
+simScore dist rho sigma = exp (negate ((dist - rho) / sigma))
+
 
 
 
