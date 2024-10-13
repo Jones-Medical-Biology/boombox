@@ -62,11 +62,17 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- rho = sortOn snd x !! 1 
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
+sigma :: (Enum a, Floating a) => a
+sigma = (sum $ (map (\x -> x - rho) x)) / (log (logBase 2 (k)))
+  where 
+    x = [1..10]
+    k = 4
+    rho = 1
 
 
 
 
--- sigma = (sum distances)/ln(log_2(k)) 
+-- sigma = (sum distances)/ ln (log_2 (k)) 
 
 
 -- Finding knn based on the distance matrix
