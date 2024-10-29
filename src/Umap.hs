@@ -62,6 +62,7 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- rho = sortOn snd x !! 1 
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
+-- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k)
 sigma :: (Enum a, Floating a) => a
 sigma = (sum $ (map (\x -> x - rho) x)) / (log (logBase 2 (k)))
   where
@@ -75,7 +76,27 @@ distances = map (\x -> (x, euclideanDistanceGeneralized point x))
 simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
 simScore dist rho sigma = exp (negate ((dist - rho) / sigma))
 
+distMatToRhos ::[[(a, b)]] -> [b] 
+distMatToRhos = map (\a -> snd (a !! 1)) 
 
+widthRho :: [[(a,b)]] -> Int
+widthRho (x:_) = length x 
+-- distanceMatrix :: [[(a,b)]]
+-- [[(a,b)]] => [a]
+
+distMatToRhoMat :: [[(a,b)]]-> [[b]]
+distMatToRhoMat x = matrixFromList (distMatToRhos x) (widthRho x) 
+
+matrixFromList :: [a] -> Int -> [[a]]
+matrixFromList [] _ = []
+matrixFromList (x:xs) n = replicate n x : matrixFromList xs n
+
+-- generate our [a] which is our list of rho or list of sigma
+-- Rho: we can get it by taking the first element !! 1 of each row in the matrix
+-- then, use the zip function that we created that has type [[a]] -> [[a]] -> [[a]]
+-- after rho matrix has been subtracted from dist matrix, divide result by sigma?
+-- apply simScore to each element within matrix 
+-- fxn that takes in 3 matrices (sigma, rho, dist) 
 
 
 
