@@ -7,6 +7,7 @@ module Umap ( dataset
 import Data.List (sortOn)
 import Control.Parallel.Strategies
 import Control.DeepSeq (NFData)
+import Data.ByteString (zipWith)
 
 type DataPoint = [Double]
 type DataSet = [DataPoint]
@@ -63,18 +64,23 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
 -- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k)
-sigma :: (Enum a, Floating a) => a
-sigma = (sum $ (map (\x -> x - rho) x)) / (log (logBase 2 (k)))
+sigma :: (Enum a, Floating a) => a -> [a] -> [a] -> a
+sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 (k)))
+
+sigmaMat :: (Enum c, Floating c) => c -> [[(a,c)]] -> [[c]] -> [c]
+sigmaMat k distMat rhoMat = zipWith (sigma k) distMatrix rhoMat
   where
-    x = [distances]
-    k = 4
-    rho = 1
+    distMatrix = map (map snd) distMat
+
 
 distances :: [DataPoint] -> DataPoint -> [(DataPoint, Double)]
 distances = map (\x -> (x, euclideanDistanceGeneralized point x))
 
 simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
 simScore dist rho sigma = exp (negate ((dist - rho) / sigma))
+
+simScoreMat 
+-- change rho to rhos (bc this change was made in sigma above)
 
 distMatToRhos ::[[(a, b)]] -> [b] 
 distMatToRhos = map (\a -> snd (a !! 1)) 
@@ -85,7 +91,7 @@ widthRho (x:_) = length x
 -- [[(a,b)]] => [a]
 
 distMatToRhoMat :: [[(a,b)]]-> [[b]]
-distMatToRhoMat x = matrixFromList (distMatToRhos x) (widthRho x) 
+distMatToRhoMat distMat = matrixFromList (distMatToRhos distMat) (widthRho distMat) 
 
 matrixFromList :: [a] -> Int -> [[a]]
 matrixFromList [] _ = []
