@@ -100,4 +100,5 @@ test-suite tests
        type: exitcode-stdio-1.0
        main-is: Tests.hs
        build-depends: base ^>=4.18.2.1
+                    , QuickCheck
        default-language: GHC2021

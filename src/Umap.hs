@@ -63,15 +63,14 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- rho = sortOn snd x !! 1 
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
--- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k)
+-- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k) (see below)
 sigma :: (Enum a, Floating a) => a -> [a] -> [a] -> a
 sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 (k)))
-
+-- !!!!!!!!!! Output is a list, needs to be a matrix.
 sigmaMat :: (Enum c, Floating c) => c -> [[(a,c)]] -> [[c]] -> [c]
 sigmaMat k distMat rhoMat = zipWith (sigma k) distMatrix rhoMat
   where
     distMatrix = map (map snd) distMat
-
 
 distances :: [DataPoint] -> DataPoint -> [(DataPoint, Double)]
 distances = map (\x -> (x, euclideanDistanceGeneralized point x))
@@ -79,9 +78,14 @@ distances = map (\x -> (x, euclideanDistanceGeneralized point x))
 simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
 simScore dist rho sigma = exp (negate ((dist - rho) / sigma))
 
-simScoreMat 
+-- !!!!!!!!!!!!!!! Need to generate simscore matrix
+simScoreMat :: [[(a,c)]] -> [[c]] -> [[c]] -> [[c]]
+simScoreMat distMat rhoMat sigmaMat = --simScoreMatrix
 -- change rho to rhos (bc this change was made in sigma above)
 
+-- !!!!!!!!!!!!!! Type system !!!!!!! Research goal creative!  
+-- simScoreMat :: [[(a,c)]] -> [[Rho]] -> [[Sigma]] -> [[SimScore]]
+  
 distMatToRhos ::[[(a, b)]] -> [b] 
 distMatToRhos = map (\a -> snd (a !! 1)) 
 
@@ -106,7 +110,7 @@ matrixFromList (x:xs) n = replicate n x : matrixFromList xs n
 
 
 
--- sigma = (sum distances)/ ln (log_2 (k)) 
+-- sigma = (sum distances)/ ln (log_2 (k))
 
 
 -- Finding knn based on the distance matrix
