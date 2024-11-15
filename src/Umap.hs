@@ -66,8 +66,13 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k) (see below)
 sigma :: (Enum a, Floating a) => a -> [a] -> [a] -> a
 sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 (k)))
+sigmas :: (Enum a, Floating a) => a -> [a] -> [a]
+sigmas sigma dists = replicate distsLength sigma
+  where
+    distsLength = length dists
+
 -- !!!!!!!!!! Output is a list, needs to be a matrix.
-sigmaMat :: (Enum c, Floating c) => c -> [[(a,c)]] -> [[c]] -> [c]
+sigmaMat :: (Enum c, Floating c) => c -> [[(a,c)]] -> [[c]] -> [[c]]
 sigmaMat k distMat rhoMat = zipWith (sigma k) distMatrix rhoMat
   where
     distMatrix = map (map snd) distMat
@@ -84,7 +89,7 @@ simScoreMat distMat rhoMat sigmaMat = --simScoreMatrix
 -- change rho to rhos (bc this change was made in sigma above)
 
 -- !!!!!!!!!!!!!! Type system !!!!!!! Research goal creative!  
--- simScoreMat :: [[(a,c)]] -> [[Rho]] -> [[Sigma]] -> [[SimScore]]
+-- *** simScoreMat :: [[(a,c)]] -> [[Rho]] -> [[Sigma]] -> [[SimScore]]
   
 distMatToRhos ::[[(a, b)]] -> [b] 
 distMatToRhos = map (\a -> snd (a !! 1)) 
