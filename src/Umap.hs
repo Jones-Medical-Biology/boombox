@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use newtype instead of data" #-}
 module Umap ( dataset
             , kNearestNeighbors
             , DataPoint
@@ -7,7 +9,7 @@ module Umap ( dataset
 import Data.List (sortOn)
 import Control.Parallel.Strategies
 import Control.DeepSeq (NFData)
-import Data.ByteString (zipWith)
+import GHC.Generics (K1)
 
 type DataPoint = [Double]
 type DataSet = [DataPoint]
@@ -63,29 +65,53 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 -- rho = sortOn snd x !! 1 
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
--- !!!!!! Generate Sigma Matrix From Rho Matrix (and distance matrix and k) (see below)
-sigma :: (Enum a, Floating a) => a -> [a] -> [a] -> a
+
+type K = Int
+type Rhos = [Rho]
+
+sigma :: (Enum a, Floating a) => K -> [a] -> Rhos -> Sigma
 sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 (k)))
 sigmas :: (Enum a, Floating a) => a -> [a] -> [a]
 sigmas sigma dists = replicate distsLength sigma
   where
     distsLength = length dists
+-- dist vs dists?
+-- dists is Dataset ??
 
--- !!!!!!!!!! Output is a list, needs to be a matrix.
-sigmaMat :: (Enum c, Floating c) => c -> [[(a,c)]] -> [[c]] -> [[c]]
-sigmaMat k distMat rhoMat = zipWith (sigma k) distMatrix rhoMat
+
+sigmaMat :: K -> DistMatrix -> RhoMatrix -> SigmaMatrix
+sigmaMat k distMat rhoMat = zipWith sigmas (zipWith (sigma k) distMatrix rhoMat) distMatrix
   where
     distMatrix = map (map snd) distMat
 
 distances :: [DataPoint] -> DataPoint -> [(DataPoint, Double)]
-distances = map (\x -> (x, euclideanDistanceGeneralized point x))
+distances datapoints point = map (\x -> (x, euclideanDistanceGeneralized point x)) datapoints
 
-simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
+simScore :: Dist -> Rho -> Sigma -> SimScore
 simScore dist rho sigma = exp (negate ((dist - rho) / sigma))
+-- need list of simScores ?
+-- dist is Double, a is sigma (can i switch a for Double by switching for Sigma?)
 
--- !!!!!!!!!!!!!!! Need to generate simscore matrix
-simScoreMat :: [[(a,c)]] -> [[c]] -> [[c]] -> [[c]]
-simScoreMat distMat rhoMat sigmaMat = --simScoreMatrix
+type Dist = Double 
+type Rho = Double
+type Sigma = Double
+type SimScore = Double
+-- data SimScore a = SimScore {
+--   simScore :: (Enum a, Floating a) => Double -> Double -> a -> Double
+-- }
+
+type DistMatrix = [[(Int, Double)]]
+type RhoMatrix = [[Rho]]
+type SigmaMatrix = [[Sigma]]
+type SimScoreMatrix = [[SimScore]]
+
+-- simScoreMat :: DistMatrix -> RhoMatrix -> SigmaMatrix
+simScoreMat :: DistMatrix -> RhoMatrix -> SigmaMatrix -> SimScoreMatrix
+simScoreMat distMat = zipWith3 (zipWith3 simScore) distMatrix
+  where
+    distMatrix = map (map snd) distMat
+
+-- simScoreMat simScore = zipWith3 (zipWith3 simScore)
 -- change rho to rhos (bc this change was made in sigma above)
 
 -- !!!!!!!!!!!!!! Type system !!!!!!! Research goal creative!  
