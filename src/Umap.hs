@@ -66,11 +66,11 @@ distanceMatrix ds = map (\point -> map (\d -> (d, euclideanDistanceGeneralized p
 
 -- (sum $ ((\x -> x - rho) x)) / ln(log_2(k))
 
-type K = Int
+type K = Double
 type Rhos = [Rho]
 
-sigma :: (Enum a, Floating a) => K -> [a] -> Rhos -> Sigma
-sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 (k)))
+sigma :: K -> [Sigma] -> Rhos -> Sigma
+sigma k dists rhos = (sum $ (zipWith (\x y -> x - y) dists rhos)) / (log (logBase 2 k))
 sigmas :: (Enum a, Floating a) => a -> [a] -> [a]
 sigmas sigma dists = replicate distsLength sigma
   where

@@ -38,4 +38,7 @@ time python nearestneighbors.py square_random.csv
 # user	0m0.999s
 # sys	0m0.161s
 # (venv) 
-```
+``
+
+Threadscope seems to show that only one thread is activating in the kmeans
+program. This seems to be the new thing that needs to be addressed.

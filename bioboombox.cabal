@@ -93,6 +93,7 @@ library
                      , attoparsec ^>=0.14.4
                      , parallel
                      , deepseq
+                     , pango
         hs-source-dirs: src
         default-language: GHC2021
 
