@@ -42,3 +42,5 @@ time python nearestneighbors.py square_random.csv
 
 Threadscope seems to show that only one thread is activating in the kmeans
 program. This seems to be the new thing that needs to be addressed.
+
+-[ ] It would be good if students could work on threading
